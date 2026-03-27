@@ -7,8 +7,17 @@
 export function setupVisibilityRefresh(
   refreshFn: () => void
 ): () => void {
+  let catchUpTimer: ReturnType<typeof setTimeout> | null = null
+
   function handleVisibilityChange() {
-    if (document.visibilityState !== 'visible') return
+    if (document.visibilityState !== 'visible') {
+      // Tab became hidden — cancel any pending catch-up
+      if (catchUpTimer) {
+        clearTimeout(catchUpTimer)
+        catchUpTimer = null
+      }
+      return
+    }
 
     const state = (window as any).__SMART_HMR_STATE__
     if (!state || state.suppressedCount === 0) return
@@ -23,13 +32,21 @@ export function setupVisibilityRefresh(
       )
     }
 
-    // Small delay to let the tab fully render before refreshing
-    setTimeout(refreshFn, 50)
+    // Longer delay to let the tab fully settle and avoid racing with navigation
+    if (catchUpTimer) clearTimeout(catchUpTimer)
+    catchUpTimer = setTimeout(() => {
+      catchUpTimer = null
+      // Double-check we're still visible before refreshing
+      if (document.visibilityState === 'visible') {
+        refreshFn()
+      }
+    }, 300)
   }
 
   document.addEventListener('visibilitychange', handleVisibilityChange)
 
   return () => {
     document.removeEventListener('visibilitychange', handleVisibilityChange)
+    if (catchUpTimer) clearTimeout(catchUpTimer)
   }
 }

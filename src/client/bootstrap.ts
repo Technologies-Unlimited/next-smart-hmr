@@ -133,6 +133,14 @@ export function getBootstrapScript(options: {
       // Only filter serverComponentChanges
       if (msg.type !== "serverComponentChanges") return true;
 
+      // If tab is hidden, always suppress to prevent cross-tab interference.
+      // The visibility-refresh handler will catch up when the tab is focused.
+      if (document.visibilityState !== "visible") {
+        state.suppressedCount++;
+        log("Tab hidden — suppressing refresh, total suppressed:", state.suppressedCount);
+        return false;
+      }
+
       // If smart-hmr isn't ready, pass through (graceful degradation)
       if (!state.enabled || !state.affectedRoutes) return true;
 
