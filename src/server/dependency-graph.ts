@@ -34,6 +34,9 @@ export class DependencyGraph {
   // Build timing
   private buildTimeMs = 0
 
+  // Collapse threshold — fraction of routes before broadcasting '*'
+  collapseThreshold = 0.75
+
   constructor(resolverConfig: ResolverConfig) {
     this.resolverConfig = resolverConfig
   }
@@ -160,7 +163,7 @@ export class DependencyGraph {
     }
 
     // Convert route IDs to route patterns
-    const routePatterns = routesToPatterns(affectedRoutes, this.routes)
+    const routePatterns = routesToPatterns(affectedRoutes, this.routes, this.collapseThreshold)
 
     return {
       routes: routePatterns,
@@ -314,13 +317,17 @@ export class DependencyGraph {
  */
 function routesToPatterns(
   affectedRouteIds: Set<string>,
-  allRoutes: Map<string, RouteEntry>
+  allRoutes: Map<string, RouteEntry>,
+  collapseThreshold = 0.75
 ): string[] {
-  // If more than 75% of all page routes are affected, just broadcast to all
+  // If more than collapseThreshold of all page routes are affected, broadcast to all
   const pageRoutes = [...allRoutes.values()].filter(
     r => r.routeType === 'page'
   )
-  if (affectedRouteIds.size >= pageRoutes.length * 0.75) {
+  if (
+    collapseThreshold < 1.0 &&
+    affectedRouteIds.size >= pageRoutes.length * collapseThreshold
+  ) {
     return ['*']
   }
 
@@ -378,6 +385,10 @@ function routesToPatterns(
     }
   }
 
+  // If no patterns could be collapsed, return exact route IDs instead of '*'
+  if (patterns.length === 0 && affectedRouteIds.size > 0) {
+    return [...affectedRouteIds]
+  }
   return patterns.length > 0 ? patterns : ['*']
 }
 

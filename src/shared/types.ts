@@ -60,6 +60,8 @@ export interface SmartHMRConfig {
   include: string[]
   exclude: string[]
   routeOverrides: Record<string, string[]>
+  /** Fraction of total routes that must be affected before broadcasting '*' (all routes). Default: 0.75. Set to 1.0 to disable. */
+  collapseThreshold: number
 }
 
 export const DEFAULT_CONFIG: SmartHMRConfig = {
@@ -69,6 +71,7 @@ export const DEFAULT_CONFIG: SmartHMRConfig = {
   include: ['src/**', 'app/**'],
   exclude: ['**/*.test.*', '**/__tests__/**', '**/node_modules/**'],
   routeOverrides: {},
+  collapseThreshold: 0.75,
 }
 
 // ─── Client-Side State ───

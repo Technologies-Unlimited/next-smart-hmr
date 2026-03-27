@@ -1,6 +1,6 @@
 {
   "name": "next-smart-hmr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Route-aware HMR for Next.js — only affected tabs refresh",
   "type": "module",
   "bin": {

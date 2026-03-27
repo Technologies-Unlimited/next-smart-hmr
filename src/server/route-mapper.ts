@@ -33,6 +33,7 @@ export class RouteMapper {
       pathAliases: {},
       knownFiles: new Set(),
     })
+    this.graph.collapseThreshold = config.collapseThreshold
   }
 
   /**
