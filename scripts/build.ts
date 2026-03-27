@@ -15,7 +15,8 @@ const DIST = join(ROOT, 'dist')
 
 // Step 1: Clean dist
 console.log('[build] Cleaning dist/')
-execSync(`rm -rf "${DIST}"`, { cwd: ROOT })
+import { rmSync } from 'node:fs'
+try { rmSync(DIST, { recursive: true, force: true }) } catch {}
 
 // Step 2: Compile with tsc
 console.log('[build] Compiling with tsc...')
