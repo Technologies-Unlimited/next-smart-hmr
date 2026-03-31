@@ -1,67 +1,24 @@
 {
-  "name": "next-smart-hmr",
-  "version": "1.0.1",
-  "description": "Route-aware HMR for Next.js — only affected tabs refresh",
-  "type": "module",
-  "bin": {
-    "smart-hmr": "./dist/cli/bin.js"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "bun": "./src/index.ts",
-      "import": "./dist/index.js"
-    },
-    "./react": {
-      "types": "./dist/client/SmartHMR.d.ts",
-      "bun": "./src/client/SmartHMR.tsx",
-      "import": "./dist/client/SmartHMR.js"
-    }
-  },
+  "name": "gss-nsx-tracker",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "build": "bun scripts/build.ts",
-    "test": "bun test",
-    "prepublishOnly": "bun run build"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "peerDependencies": {
-    "next": "^16",
-    "react": "^19"
+  "dependencies": {
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.11",
+    "@types/node": "^22",
     "@types/react": "^19",
-    "next": "^16",
-    "react": "^19",
-    "typescript": "^6"
-  },
-  "keywords": [
-    "nextjs",
-    "hmr",
-    "hot-reload",
-    "hot-module-replacement",
-    "fast-refresh",
-    "developer-experience",
-    "selective-hmr",
-    "route-aware",
-    "next-plugin"
-  ],
-  "files": [
-    "dist/",
-    "src/",
-    "README.md",
-    "LICENSE"
-  ],
-  "author": "Technologies Unlimited",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Technologies-Unlimited/next-smart-hmr.git"
-  },
-  "homepage": "https://github.com/Technologies-Unlimited/next-smart-hmr#readme",
-  "bugs": {
-    "url": "https://github.com/Technologies-Unlimited/next-smart-hmr/issues"
-  },
-  "engines": {
-    "bun": ">=1.0.0"
+    "@types/react-dom": "^19",
+    "typescript": "^5.8",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
   }
 }
